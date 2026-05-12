@@ -1,3 +1,5 @@
+from encryption import encrypt_password, decrypt_password
+
 VAULT_FILE = "vault.txt"
 
 
@@ -6,10 +8,12 @@ def add_credential():
     username = input("Username: ")
     password = input("Password: ")
 
-    with open(VAULT_FILE, "a") as file:
-        file.write(f"{website}|{username}|{password}\n")
+    encrypted_password = encrypt_password(password)
 
-    print("Credential saved.")
+    with open(VAULT_FILE, "a") as file:
+        file.write(f"{website}|{username}|{encrypted_password}\n")
+
+    print("Credential saved securely.")
 
 
 def view_credentials():
@@ -24,12 +28,14 @@ def view_credentials():
             print("\n=== Stored Credentials ===")
 
             for credential in credentials:
-                website, username, password = credential.strip().split("|")
+                website, username, encrypted_password = credential.strip().split("|")
+
+                decrypted_password = decrypt_password(encrypted_password)
 
                 print(f"""
 Website: {website}
 Username: {username}
-Password: {password}
+Password: {decrypted_password}
 ------------------------
 """)
 
