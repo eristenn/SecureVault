@@ -11,6 +11,7 @@ master.hash
 *.db
 .env
 vault.txt
+vault.key
 
 # IDE files
 .vscode/
