@@ -1,5 +1,6 @@
 from auth import setup_master_password, verify_master_password
 from generator import generate_password
+from vault import add_credential, view_credentials
 
 
 def menu():
@@ -13,13 +14,15 @@ def menu():
         choice = input("Choose an option: ")
 
         if choice == "1":
-            print("Feature coming soon.")
+            add_credential()
 
         elif choice == "2":
-            print("Feature coming soon.")
+            view_credentials()
 
         elif choice == "3":
-            password = generate_password()
+            length = int(input("Password length: "))
+            password = generate_password(length)
+
             print(f"\nGenerated Password:\n{password}")
 
         elif choice == "4":
