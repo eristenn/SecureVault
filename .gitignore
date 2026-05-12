@@ -10,6 +10,7 @@ master.hash
 *.key
 *.db
 .env
+vault.txt
 
 # IDE files
 .vscode/
@@ -18,3 +19,4 @@ master.hash
 # OS files
 .DS_Store
 Thumbs.db
+
