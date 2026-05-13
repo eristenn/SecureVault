@@ -1,5 +1,6 @@
 import hashlib
 import os
+from getpass import getpass
 
 MASTER_PASSWORD_FILE = "master.hash"
 
@@ -13,7 +14,7 @@ def setup_master_password():
         return
 
     print("=== First Time Setup ===")
-    password = input("Create a master password: ")
+    password = getpass("Create a master password: ")
 
     hashed = hash_password(password)
 
@@ -24,7 +25,7 @@ def setup_master_password():
 
 
 def verify_master_password():
-    password = input("Enter master password: ")
+    password = getpass("Enter master password: ")
 
     hashed = hash_password(password)
 
