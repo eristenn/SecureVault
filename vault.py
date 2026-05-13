@@ -1,4 +1,5 @@
 from encryption import encrypt_password, decrypt_password
+from getpass import getpass
 
 VAULT_FILE = "vault.txt"
 
@@ -6,7 +7,7 @@ VAULT_FILE = "vault.txt"
 def add_credential():
     website = input("Website: ")
     username = input("Username: ")
-    password = input("Password: ")
+    password = getpass("Password: ")
 
     encrypted_password = encrypt_password(password)
 
