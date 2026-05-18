@@ -1,6 +1,11 @@
 from auth import setup_master_password, verify_master_password
 from generator import generate_password
-from vault import add_credential, view_credentials, delete_credential
+from vault import (
+    add_credential,
+    view_credentials,
+    delete_credential,
+    search_credentials
+)
 
 
 def menu():
@@ -9,8 +14,9 @@ def menu():
         print("1. Add Credential")
         print("2. View Credentials")
         print("3. Delete Credential")
-        print("4. Generate Password")
-        print("5. Exit")
+        print("4. Search Credentials")
+        print("5. Generate Password")
+        print("6. Exit")
 
         choice = input("Choose an option: ")
 
@@ -24,12 +30,15 @@ def menu():
             delete_credential()
 
         elif choice == "4":
+            search_credentials()
+
+        elif choice == "5":
             length = int(input("Password length: "))
             password = generate_password(length)
 
             print(f"\nGenerated Password:\n{password}")
 
-        elif choice == "5":
+        elif choice == "6":
             print("Goodbye.")
             break
 
