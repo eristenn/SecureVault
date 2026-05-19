@@ -1,5 +1,6 @@
 from encryption import encrypt_password, decrypt_password
 from getpass import getpass
+from datetime import datetime
 
 VAULT_FILE = "vault.txt"
 
