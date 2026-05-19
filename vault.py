@@ -12,8 +12,12 @@ def add_credential():
 
     encrypted_password = encrypt_password(password)
 
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     with open(VAULT_FILE, "a") as file:
-        file.write(f"{website}|{username}|{encrypted_password}\n")
+        file.write(
+            f"{website}|{username}|{encrypted_password}|{timestamp}\n"
+        )
 
     print("Credential saved securely.")
 
@@ -30,14 +34,19 @@ def view_credentials():
             print("\n=== Stored Credentials ===")
 
             for credential in credentials:
-                website, username, encrypted_password = credential.strip().split("|")
+                website, username, encrypted_password, timestamp = (
+                    credential.strip().split("|")
+                )
 
-                decrypted_password = decrypt_password(encrypted_password)
+                decrypted_password = decrypt_password(
+                    encrypted_password
+                )
 
                 print(f"""
 Website: {website}
 Username: {username}
 Password: {decrypted_password}
+Date Added: {timestamp}
 ------------------------
 """)
 
@@ -57,11 +66,15 @@ def delete_credential():
         print("\n=== Stored Credentials ===")
 
         for index, credential in enumerate(credentials, start=1):
-            website, username, encrypted_password = credential.strip().split("|")
+            website, username, encrypted_password, timestamp = (
+                credential.strip().split("|")
+            )
 
             print(f"{index}. {website} ({username})")
 
-        choice = int(input("\nEnter credential number to delete: "))
+        choice = int(
+            input("\nEnter credential number to delete: ")
+        )
 
         if choice < 1 or choice > len(credentials):
             print("Invalid selection.")
@@ -72,9 +85,13 @@ def delete_credential():
         with open(VAULT_FILE, "w") as file:
             file.writelines(credentials)
 
-        website, username, _ = deleted_credential.strip().split("|")
+        website, username, _, _ = (
+            deleted_credential.strip().split("|")
+        )
 
-        print(f"Deleted credential for {website} ({username})")
+        print(
+            f"Deleted credential for {website} ({username})"
+        )
 
     except FileNotFoundError:
         print("No vault file found.")
@@ -92,25 +109,32 @@ def search_credentials():
             print("No credentials stored.")
             return
 
-        search_term = input("Search website or username: ").lower()
+        search_term = input(
+            "Search website or username: "
+        ).lower()
 
         matches_found = False
 
         print("\n=== Search Results ===")
 
         for credential in credentials:
-            website, username, encrypted_password = credential.strip().split("|")
+            website, username, encrypted_password, timestamp = (
+                credential.strip().split("|")
+            )
 
             if (
                 search_term in website.lower()
                 or search_term in username.lower()
             ):
-                decrypted_password = decrypt_password(encrypted_password)
+                decrypted_password = decrypt_password(
+                    encrypted_password
+                )
 
                 print(f"""
 Website: {website}
 Username: {username}
 Password: {decrypted_password}
+Date Added: {timestamp}
 ------------------------
 """)
 
