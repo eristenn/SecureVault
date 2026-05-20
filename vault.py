@@ -1,6 +1,7 @@
 from encryption import encrypt_password, decrypt_password
 from getpass import getpass
 from datetime import datetime
+from strength import check_password_strength
 
 VAULT_FILE = "vault.txt"
 
@@ -9,6 +10,10 @@ def add_credential():
     website = input("Website: ")
     username = input("Username: ")
     password = getpass("Password: ")
+    
+    strength = check_password_strength(password)
+
+    print(f"Password Strength: {strength}")
 
     encrypted_password = encrypt_password(password)
 
