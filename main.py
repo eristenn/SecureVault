@@ -4,7 +4,8 @@ from vault import (
     add_credential,
     view_credentials,
     delete_credential,
-    search_credentials
+    search_credentials,
+    copy_password
 )
 
 
@@ -15,8 +16,9 @@ def menu():
         print("2. View Credentials")
         print("3. Delete Credential")
         print("4. Search Credentials")
-        print("5. Generate Password")
-        print("6. Exit")
+        print("5. Copy Password")
+        print("6. Generate Password")
+        print("7. Exit")
 
         choice = input("Choose an option: ")
 
@@ -33,12 +35,15 @@ def menu():
             search_credentials()
 
         elif choice == "5":
+            copy_password()
+
+        elif choice == "6":
             length = int(input("Password length: "))
             password = generate_password(length)
 
             print(f"\nGenerated Password:\n{password}")
 
-        elif choice == "6":
+        elif choice == "7":
             print("Goodbye.")
             break
 
