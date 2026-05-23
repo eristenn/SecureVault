@@ -60,3 +60,37 @@ def verify_master_password():
     time.sleep(LOCKOUT_TIME)
 
     return False
+
+
+def change_master_password():
+    with open(MASTER_PASSWORD_FILE, "r") as file:
+        stored_password = file.read()
+
+    current_password = getpass(
+        "Enter current master password: "
+    )
+
+    current_hash = hash_password(current_password)
+
+    if current_hash != stored_password:
+        print("Current password is incorrect.")
+        return
+
+    new_password = getpass(
+        "Enter new master password: "
+    )
+
+    confirm_password = getpass(
+        "Confirm new master password: "
+    )
+
+    if new_password != confirm_password:
+        print("Passwords do not match.")
+        return
+
+    new_hash = hash_password(new_password)
+
+    with open(MASTER_PASSWORD_FILE, "w") as file:
+        file.write(new_hash)
+
+    print("Master password updated successfully.")
