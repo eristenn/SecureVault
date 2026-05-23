@@ -1,5 +1,11 @@
-from auth import setup_master_password, verify_master_password
+from auth import (
+    setup_master_password,
+    verify_master_password,
+    change_master_password
+)
+
 from generator import generate_password
+
 from vault import (
     add_credential,
     view_credentials,
@@ -18,7 +24,8 @@ def menu():
         print("4. Search Credentials")
         print("5. Copy Password")
         print("6. Generate Password")
-        print("7. Exit")
+        print("7. Change Master Password")
+        print("8. Exit")
 
         choice = input("Choose an option: ")
 
@@ -38,12 +45,20 @@ def menu():
             copy_password()
 
         elif choice == "6":
-            length = int(input("Password length: "))
+            length = int(
+                input("Password length: ")
+            )
+
             password = generate_password(length)
 
-            print(f"\nGenerated Password:\n{password}")
+            print(
+                f"\nGenerated Password:\n{password}"
+            )
 
         elif choice == "7":
+            change_master_password()
+
+        elif choice == "8":
             print("Goodbye.")
             break
 
