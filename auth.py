@@ -1,8 +1,12 @@
 import hashlib
 import os
+import time
 from getpass import getpass
 
 MASTER_PASSWORD_FILE = "master.hash"
+
+MAX_ATTEMPTS = 3
+LOCKOUT_TIME = 30
 
 
 def hash_password(password):
@@ -10,26 +14,49 @@ def hash_password(password):
 
 
 def setup_master_password():
-    if os.path.exists(MASTER_PASSWORD_FILE):
-        return
+    if not os.path.exists(MASTER_PASSWORD_FILE):
+        password = getpass(
+            "Create a master password: "
+        )
 
-    print("=== First Time Setup ===")
-    password = getpass("Create a master password: ")
+        hashed_password = hash_password(password)
 
-    hashed = hash_password(password)
+        with open(MASTER_PASSWORD_FILE, "w") as file:
+            file.write(hashed_password)
 
-    with open(MASTER_PASSWORD_FILE, "w") as f:
-        f.write(hashed)
-
-    print("Master password created.\n")
+        print("Master password created.")
 
 
 def verify_master_password():
-    password = getpass("Enter master password: ")
+    with open(MASTER_PASSWORD_FILE, "r") as file:
+        stored_password = file.read()
 
-    hashed = hash_password(password)
+    attempts = 0
 
-    with open(MASTER_PASSWORD_FILE, "r") as f:
-        stored_hash = f.read()
+    while attempts < MAX_ATTEMPTS:
+        password = getpass(
+            "Enter master password: "
+        )
 
-    return hashed == stored_hash
+        hashed_password = hash_password(password)
+
+        if hashed_password == stored_password:
+            return True
+
+        attempts += 1
+
+        remaining = MAX_ATTEMPTS - attempts
+
+        print(
+            f"Incorrect password. "
+            f"{remaining} attempts remaining."
+        )
+
+    print(
+        f"\nToo many failed attempts."
+        f"\nAccess locked for {LOCKOUT_TIME} seconds."
+    )
+
+    time.sleep(LOCKOUT_TIME)
+
+    return False
