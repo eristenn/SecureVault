@@ -1,6 +1,6 @@
 from encryption import encrypt_password, decrypt_password
 from getpass import getpass
-from datetime import datetime
+from datetime import datetime, timedelta
 from strength import check_password_strength
 import pyperclip
 
@@ -83,11 +83,29 @@ def view_credentials():
                         decrypted_password
                     )
 
+                credential_date = datetime.strptime(
+                    timestamp,
+                    "%Y-%m-%d %H:%M:%S"
+                )
+
+                password_age = (
+                    datetime.now() - credential_date
+                )
+
+                warning_message = ""
+
+                if password_age > timedelta(days=90):
+                    warning_message = (
+                        "WARNING: Password is older "
+                        "than 90 days."
+                    )
+
                 print(f"""
 Website: {website}
 Username: {username}
 Password: {display_password}
 Date Added: {timestamp}
+{warning_message}
 ------------------------
 """)
 
@@ -171,11 +189,29 @@ def search_credentials():
                     encrypted_password
                 )
 
+                credential_date = datetime.strptime(
+                    timestamp,
+                    "%Y-%m-%d %H:%M:%S"
+                )
+
+                password_age = (
+                    datetime.now() - credential_date
+                )
+
+                warning_message = ""
+
+                if password_age > timedelta(days=90):
+                    warning_message = (
+                        "WARNING: Password is older "
+                        "than 90 days."
+                    )
+
                 print(f"""
 Website: {website}
 Username: {username}
 Password: {decrypted_password}
 Date Added: {timestamp}
+{warning_message}
 ------------------------
 """)
 
@@ -208,7 +244,8 @@ def copy_password():
 
         choice = int(
             input(
-                "\nSelect credential number to copy password: "
+                "\nSelect credential number "
+                "to copy password: "
             )
         )
 
