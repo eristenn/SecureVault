@@ -3,6 +3,7 @@ from getpass import getpass
 from datetime import datetime, timedelta
 from strength import check_password_strength
 import pyperclip
+import shutil
 
 VAULT_FILE = "vault.txt"
 
@@ -277,3 +278,20 @@ def copy_password():
 
     except ValueError:
         print("Invalid input.")
+
+
+def export_backup():
+    try:
+        backup_name = (
+            f"vault_backup_"
+            f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+        )
+
+        shutil.copy(VAULT_FILE, backup_name)
+
+        print(
+            f"Encrypted backup created: {backup_name}"
+        )
+
+    except FileNotFoundError:
+        print("No vault file found.")
