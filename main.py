@@ -11,7 +11,8 @@ from vault import (
     view_credentials,
     delete_credential,
     search_credentials,
-    copy_password
+    copy_password,
+    export_backup
 )
 
 
@@ -25,7 +26,8 @@ def menu():
         print("5. Copy Password")
         print("6. Generate Password")
         print("7. Change Master Password")
-        print("8. Exit")
+        print("8. Export Encrypted Backup")
+        print("9. Exit")
 
         choice = input("Choose an option: ")
 
@@ -59,6 +61,9 @@ def menu():
             change_master_password()
 
         elif choice == "8":
+            export_backup()
+
+        elif choice == "9":
             print("Goodbye.")
             break
 
