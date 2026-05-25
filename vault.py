@@ -295,3 +295,63 @@ def export_backup():
 
     except FileNotFoundError:
         print("No vault file found.")
+
+
+def security_audit():
+    try:
+        with open(VAULT_FILE, "r") as file:
+            credentials = file.readlines()
+
+        if not credentials:
+            print("No credentials stored.")
+            return
+
+        total_credentials = len(credentials)
+        weak_passwords = 0
+        old_passwords = 0
+
+        for credential in credentials:
+            website, username, encrypted_password, timestamp = (
+                credential.strip().split("|")
+            )
+
+            decrypted_password = decrypt_password(
+                encrypted_password
+            )
+
+            strength = check_password_strength(
+                decrypted_password
+            )
+
+            if strength == "Weak":
+                weak_passwords += 1
+
+            credential_date = datetime.strptime(
+                timestamp,
+                "%Y-%m-%d %H:%M:%S"
+            )
+
+            password_age = (
+                datetime.now() - credential_date
+            )
+
+            if password_age > timedelta(days=90):
+                old_passwords += 1
+
+        print("\n=== Vault Security Audit ===")
+
+        print(
+            f"Total Credentials: {total_credentials}"
+        )
+
+        print(
+            f"Weak Passwords: {weak_passwords}"
+        )
+
+        print(
+            f"Old Passwords (>90 days): "
+            f"{old_passwords}"
+        )
+
+    except FileNotFoundError:
+        print("No vault file found.")
