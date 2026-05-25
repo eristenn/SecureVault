@@ -12,7 +12,8 @@ from vault import (
     delete_credential,
     search_credentials,
     copy_password,
-    export_backup
+    export_backup,
+    security_audit
 )
 
 
@@ -27,7 +28,8 @@ def menu():
         print("6. Generate Password")
         print("7. Change Master Password")
         print("8. Export Encrypted Backup")
-        print("9. Exit")
+        print("9. Run Security Audit")
+        print("10. Exit")
 
         choice = input("Choose an option: ")
 
@@ -64,6 +66,9 @@ def menu():
             export_backup()
 
         elif choice == "9":
+            security_audit()
+
+        elif choice == "10":
             print("Goodbye.")
             break
 
