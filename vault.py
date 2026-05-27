@@ -382,3 +382,73 @@ def security_audit():
 
     except FileNotFoundError:
         print("No vault file found.")
+
+
+def view_credentials_file():
+    try:
+        with open(VAULT_FILE, "r") as file:
+            credentials = file.readlines()
+
+        if not credentials:
+            return "No credentials stored."
+
+        output = "\n=== Stored Credentials ===\n\n"
+
+        for credential in credentials:
+            website, username, encrypted_password, timestamp = (
+                credential.strip().split("|")
+            )
+
+            decrypted_password = decrypt_password(
+                encrypted_password
+            )
+
+            output += (
+                f"Website: {website}\n"
+                f"Username: {username}\n"
+                f"Password: {decrypted_password}\n"
+                f"Date Added: {timestamp}\n"
+                f"------------------------\n\n"
+            )
+
+        return output
+
+    except FileNotFoundError:
+        return "No vault file found."
+
+def add_credential_gui(
+    website,
+    username,
+    password
+):
+    try:
+        with open(VAULT_FILE, "r") as file:
+            credentials = file.readlines()
+
+            for credential in credentials:
+                stored_website, stored_username, _, _ = (
+                    credential.strip().split("|")
+                )
+
+                if (
+                    website.lower() == stored_website.lower()
+                    and username.lower() == stored_username.lower()
+                ):
+                    return "Credential already exists."
+
+    except FileNotFoundError:
+        pass
+
+    encrypted_password = encrypt_password(password)
+
+    timestamp = datetime.now().strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
+
+    with open(VAULT_FILE, "a") as file:
+        file.write(
+            f"{website}|{username}|"
+            f"{encrypted_password}|{timestamp}\n"
+        )
+
+    return "Credential saved securely."
