@@ -319,6 +319,9 @@ def security_audit():
         total_credentials = len(credentials)
         weak_passwords = 0
         old_passwords = 0
+        reused_passwords = 0
+
+        password_list = []
 
         for credential in credentials:
             website, username, encrypted_password, timestamp = (
@@ -327,6 +330,10 @@ def security_audit():
 
             decrypted_password = decrypt_password(
                 encrypted_password
+            )
+
+            password_list.append(
+                decrypted_password
             )
 
             strength = check_password_strength(
@@ -348,6 +355,11 @@ def security_audit():
             if password_age > timedelta(days=90):
                 old_passwords += 1
 
+        reused_passwords = (
+            len(password_list)
+            - len(set(password_list))
+        )
+
         print("\n=== Vault Security Audit ===")
 
         print(
@@ -361,6 +373,11 @@ def security_audit():
         print(
             f"Old Passwords (>90 days): "
             f"{old_passwords}"
+        )
+
+        print(
+            f"Reused Passwords Detected: "
+            f"{reused_passwords}"
         )
 
     except FileNotFoundError:
