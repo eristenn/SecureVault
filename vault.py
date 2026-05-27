@@ -282,6 +282,16 @@ def copy_password():
 
 def export_backup():
     try:
+        confirmation = input(
+            "\nWARNING: Backup files contain "
+            "sensitive encrypted credential data.\n"
+            "Continue export? (y/n): "
+        ).lower()
+
+        if confirmation != "y":
+            print("Backup export cancelled.")
+            return
+
         backup_name = (
             f"vault_backup_"
             f"{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
