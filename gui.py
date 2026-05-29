@@ -5,7 +5,8 @@ from generator import generate_password
 from vault import (
     view_credentials_file,
     add_credential_gui,
-    security_audit
+    security_audit,
+    search_credentials
 )
 from auth import verify_master_password
 
@@ -46,6 +47,10 @@ class LoginWindow(ctk.CTk):
         )
 
         self.password_entry.pack(pady=10)
+        self.password_entry.bind(
+            "<Return>",
+            lambda event: self.login()
+        )
 
         login_button = ctk.CTkButton(
             self,
@@ -287,19 +292,91 @@ class SecureVaultApp(ctk.CTk):
 
         title.pack(pady=20)
 
-        vault_text = ctk.CTkTextbox(
-            self.main_frame,
-            width=700,
-            height=350
+        # =========================
+        # SEARCH FRAME
+        # =========================
+
+        search_frame = ctk.CTkFrame(
+            self.main_frame
         )
 
-        vault_text.pack(pady=10)
+        search_frame.pack(
+            fill="x",
+            padx=20,
+            pady=10
+        )
 
-        credentials = view_credentials_file()
+        search_entry = ctk.CTkEntry(
+            search_frame,
+            placeholder_text=(
+                "Search website or username"
+            )
+        )
 
-        vault_text.insert(
+        search_entry.pack(
+            side="left",
+            fill="x",
+            expand=True,
+            padx=(10, 5),
+            pady=10
+        )
+
+        vault_box = ctk.CTkTextbox(
+            self.main_frame
+        )
+
+        vault_box.pack(
+            fill="both",
+            expand=True,
+            padx=20,
+            pady=10
+        )
+
+        vault_box.insert(
             "end",
-            credentials
+            view_credentials_file()
+        )
+
+        def run_search():
+
+            search_term = (
+                search_entry.get()
+            )
+
+            results = (
+                search_credentials(
+                    search_term
+                )
+            )
+
+            vault_box.delete(
+                "1.0",
+                "end"
+            )
+
+            vault_box.insert(
+                "end",
+                results
+            )
+
+        search_button = ctk.CTkButton(
+            search_frame,
+            text="Search",
+            command=run_search,
+            width=120
+        )
+
+        search_button.pack(
+            side="right",
+            padx=(5, 10),
+            pady=10
+        )
+
+        # ENTER KEY SUPPORT
+
+        search_entry.bind(
+            "<Return>",
+            lambda event: run_search()
         )
 
     # =========================
@@ -372,6 +449,10 @@ class SecureVaultApp(ctk.CTk):
         )
 
         self.password_entry.pack(pady=10)
+        self.password_entry.bind(
+            "<Return>",
+            lambda event: self.login()
+        )
 
         save_button = ctk.CTkButton(
             self.main_frame,

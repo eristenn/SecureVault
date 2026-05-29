@@ -566,3 +566,57 @@ def security_audit():
         )
 
     return "".join(results)
+
+def search_credentials(search_term):
+
+    try:
+
+        with open(
+            VAULT_FILE,
+            "r"
+        ) as file:
+
+            credentials = file.readlines()
+
+    except FileNotFoundError:
+
+        return (
+            "No vault data found."
+        )
+
+    results = []
+
+    for credential in credentials:
+
+        try:
+
+            website, username, encrypted_password, timestamp = (
+                credential.strip().split("|")
+            )
+
+            decrypted_password = decrypt_password(
+                encrypted_password
+            )
+
+            if (
+                search_term.lower() in website.lower()
+                or search_term.lower() in username.lower()
+            ):
+
+                results.append(
+                    f"Website: {website}\n"
+                    f"Username: {username}\n"
+                    f"Password: {decrypted_password}\n"
+                    f"Date Added: {timestamp}\n\n"
+                )
+
+        except:
+            continue
+
+    if not results:
+
+        return (
+            "No matching credentials found."
+        )
+
+    return "".join(results)
