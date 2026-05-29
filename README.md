@@ -1,6 +1,6 @@
 # SecureVault
 
-SecureVault is a Python-based password manager focused on secure credential storage, encryption, and desktop application development.
+SecureVault is a Python-based password manager focused on secure credential storage, encryption, authentication, and desktop application development.
 
 This project was built to practice:
 - cybersecurity fundamentals
@@ -17,10 +17,12 @@ This project was built to practice:
 - Master password login system
 - SHA-256 password hashing
 - Secure login verification
+- Login lockout protection after failed attempts
 
 ## Credential Management
 - Add credentials securely
 - View stored credentials
+- Search stored credentials
 - Duplicate credential detection
 - Password age tracking
 
@@ -29,11 +31,18 @@ This project was built to practice:
 - Password strength analysis
 - Encrypted password storage using Fernet encryption
 
+## Security Audit System
+- Weak password detection
+- Reused password detection
+- GUI-based security audit dashboard
+
 ## GUI Application
 - Desktop GUI built with CustomTkinter
 - Sidebar navigation system
 - Modern dark-mode interface
 - Dynamic page switching
+- Responsive resizing layout
+- Enter key support for user actions
 
 ---
 
@@ -99,16 +108,20 @@ python gui.py
 ## Password Generator
 <img width="902" height="532" alt="SecureVaultPic5" src="https://github.com/user-attachments/assets/6eea1ff6-7521-465c-b902-f8045ee0e0e7" />
 
+## Security Audit
+<img width="902" height="532" alt="SecureVaultPic6" src="https://github.com/user-attachments/assets/512f5e18-34b6-4463-9be5-d1a7fb024a3f" />
+
 ---
 
 # Future Features
 
+- Delete credentials
+- Edit credentials
 - SQLite database integration
-- Search functionality
-- Delete/edit credentials
 - Export as desktop executable (.exe)
-- Security audit dashboard
 - Custom themes and icons
+- Credential categories/tags
+- Cloud synchronization
 
 ---
 
