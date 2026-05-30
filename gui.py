@@ -6,7 +6,8 @@ from vault import (
     view_credentials_file,
     add_credential_gui,
     security_audit,
-    search_credentials
+    search_credentials,
+    delete_credential
 )
 from auth import verify_master_password
 
@@ -308,9 +309,7 @@ class SecureVaultApp(ctk.CTk):
 
         search_entry = ctk.CTkEntry(
             search_frame,
-            placeholder_text=(
-                "Search website or username"
-            )
+            placeholder_text="Search website or username"
         )
 
         search_entry.pack(
@@ -321,32 +320,12 @@ class SecureVaultApp(ctk.CTk):
             pady=10
         )
 
-        vault_box = ctk.CTkTextbox(
-            self.main_frame
-        )
-
-        vault_box.pack(
-            fill="both",
-            expand=True,
-            padx=20,
-            pady=10
-        )
-
-        vault_box.insert(
-            "end",
-            view_credentials_file()
-        )
-
         def run_search():
 
-            search_term = (
-                search_entry.get()
-            )
+            search_term = search_entry.get()
 
-            results = (
-                search_credentials(
-                    search_term
-                )
+            results = search_credentials(
+                search_term
             )
 
             vault_box.delete(
@@ -372,12 +351,125 @@ class SecureVaultApp(ctk.CTk):
             pady=10
         )
 
-        # ENTER KEY SUPPORT
-
         search_entry.bind(
             "<Return>",
             lambda event: run_search()
         )
+
+        # =========================
+        # DELETE FRAME
+        # =========================
+
+        delete_frame = ctk.CTkFrame(
+            self.main_frame
+        )
+
+        delete_frame.pack(
+            fill="x",
+            padx=20,
+            pady=(0, 10)
+        )
+
+        delete_website_entry = ctk.CTkEntry(
+            delete_frame,
+            placeholder_text="Website"
+        )
+
+        delete_website_entry.pack(
+            side="left",
+            fill="x",
+            expand=True,
+            padx=5,
+            pady=10
+        )
+
+        delete_username_entry = ctk.CTkEntry(
+            delete_frame,
+            placeholder_text="Username"
+        )
+
+        delete_username_entry.pack(
+            side="left",
+            fill="x",
+            expand=True,
+            padx=5,
+            pady=10
+        )
+
+        def run_delete():
+
+            result = delete_credential(
+                delete_website_entry.get(),
+                delete_username_entry.get()
+            )
+
+            delete_status.configure(
+                text=result
+            )
+
+            vault_box.delete(
+                "1.0",
+                "end"
+            )
+
+            vault_box.insert(
+                "end",
+                view_credentials_file()
+            )
+
+        delete_button = ctk.CTkButton(
+            delete_frame,
+            text="Delete",
+            command=run_delete,
+            width=120
+        )
+
+        delete_button.pack(
+            side="right",
+            padx=5,
+            pady=10
+        )
+
+        delete_website_entry.bind(
+            "<Return>",
+            lambda event: run_delete()
+        )
+
+        delete_username_entry.bind(
+            "<Return>",
+            lambda event: run_delete()
+        )
+
+        delete_status = ctk.CTkLabel(
+            self.main_frame,
+            text=""
+        )
+
+        delete_status.pack(
+            pady=(0, 10)
+        )
+
+        # =========================
+        # VAULT DISPLAY
+        # =========================
+
+        vault_box = ctk.CTkTextbox(
+            self.main_frame
+        )
+
+        vault_box.pack(
+            fill="both",
+            expand=True,
+            padx=20,
+            pady=10
+        )
+
+        vault_box.insert(
+            "end",
+            view_credentials_file()
+        )
+
+    
 
     # =========================
     # SECURITY AUDIT
@@ -451,7 +543,7 @@ class SecureVaultApp(ctk.CTk):
         self.password_entry.pack(pady=10)
         self.password_entry.bind(
             "<Return>",
-            lambda event: self.login()
+            lambda event: self.save_credential_action()
         )
 
         save_button = ctk.CTkButton(

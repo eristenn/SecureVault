@@ -620,3 +620,68 @@ def search_credentials(search_term):
         )
 
     return "".join(results)
+
+def delete_credential(website, username):
+
+    try:
+
+        with open(
+            VAULT_FILE,
+            "r"
+        ) as file:
+
+            credentials = file.readlines()
+
+    except FileNotFoundError:
+
+        return (
+            "Vault file not found."
+        )
+
+    updated_credentials = []
+
+    deleted = False
+
+    for credential in credentials:
+
+        try:
+
+            stored_website, stored_username, encrypted_password, timestamp = (
+                credential.strip().split("|")
+            )
+
+            if (
+                stored_website.lower() == website.lower()
+                and stored_username.lower() == username.lower()
+            ):
+
+                deleted = True
+                continue
+
+            updated_credentials.append(
+                credential
+            )
+
+        except:
+            updated_credentials.append(
+                credential
+            )
+
+    with open(
+        VAULT_FILE,
+        "w"
+    ) as file:
+
+        file.writelines(
+            updated_credentials
+        )
+
+    if deleted:
+
+        return (
+            "Credential deleted successfully."
+        )
+
+    return (
+        "Credential not found."
+    )
