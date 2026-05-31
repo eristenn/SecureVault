@@ -1,9 +1,28 @@
 import hashlib
 import os
+import sys
 import time
 from getpass import getpass
 
-MASTER_PASSWORD_FILE = "master.hash"
+
+def resource_path(filename):
+
+    if getattr(sys, "frozen", False):
+
+        return os.path.join(
+            os.path.dirname(sys.executable),
+            filename
+        )
+
+    return os.path.join(
+        os.path.dirname(__file__),
+        filename
+    )
+
+
+MASTER_PASSWORD_FILE = resource_path(
+    "master.hash"
+)
 
 MAX_ATTEMPTS = 3
 LOCKOUT_TIME = 30

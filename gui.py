@@ -7,7 +7,8 @@ from vault import (
     add_credential_gui,
     security_audit,
     search_credentials,
-    delete_credential
+    delete_credential,
+    edit_credential
 )
 from auth import verify_master_password
 
@@ -372,7 +373,7 @@ class SecureVaultApp(ctk.CTk):
 
         delete_website_entry = ctk.CTkEntry(
             delete_frame,
-            placeholder_text="Website"
+            placeholder_text="Website to Delete"
         )
 
         delete_website_entry.pack(
@@ -385,7 +386,7 @@ class SecureVaultApp(ctk.CTk):
 
         delete_username_entry = ctk.CTkEntry(
             delete_frame,
-            placeholder_text="Username"
+            placeholder_text="Username to Delete"
         )
 
         delete_username_entry.pack(
@@ -448,6 +449,119 @@ class SecureVaultApp(ctk.CTk):
         delete_status.pack(
             pady=(0, 10)
         )
+
+        # =========================
+        # EDIT FRAME
+        # =========================
+
+        edit_frame = ctk.CTkFrame(
+            self.main_frame
+        )
+
+        edit_frame.pack(
+            fill="x",
+            padx=20,
+            pady=(0, 10)
+        )
+
+        edit_website_entry = ctk.CTkEntry(
+        edit_frame,
+            placeholder_text="Website to Edit"
+        )
+
+        edit_website_entry.pack(
+            side="left",
+            fill="x",
+            expand=True,
+            padx=5,
+            pady=10
+        )
+
+        edit_username_entry = ctk.CTkEntry(
+            edit_frame,
+            placeholder_text="Username to Edit"
+        )
+
+        edit_username_entry.pack(
+            side="left",
+            fill="x",
+            expand=True,
+            padx=5,
+            pady=10
+        )
+
+        edit_password_entry = ctk.CTkEntry(
+            edit_frame,
+            placeholder_text="New Password"
+        )
+
+        edit_password_entry.pack(
+            side="left",
+            fill="x",
+            expand=True,
+            padx=5,
+            pady=10
+        )
+
+        def run_edit():
+
+            result = edit_credential(
+                edit_website_entry.get(),
+                edit_username_entry.get(),
+                edit_password_entry.get()
+            )
+
+            edit_status.configure(
+                text=result
+            )
+
+            vault_box.delete(
+                "1.0",
+                "end"
+            )
+
+            vault_box.insert(
+                "end",
+                view_credentials_file()
+            )
+
+        edit_button = ctk.CTkButton(
+            edit_frame,
+            text="Edit",
+            command=run_edit,
+            width=120
+        )
+
+        edit_button.pack(
+            side="right",
+            padx=5,
+            pady=10
+        )
+
+        edit_website_entry.bind(
+            "<Return>",
+            lambda event: run_edit()
+        )
+
+        edit_username_entry.bind(
+            "<Return>",
+            lambda event: run_edit()
+        )
+
+        edit_password_entry.bind(
+            "<Return>",
+            lambda event: run_edit()
+        )
+
+        edit_status = ctk.CTkLabel(
+            self.main_frame,
+            text=""
+        )
+
+        edit_status.pack(
+            pady=(0, 10)
+        )
+
 
         # =========================
         # VAULT DISPLAY

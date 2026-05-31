@@ -4,8 +4,28 @@ from datetime import datetime, timedelta
 from strength import check_password_strength
 import pyperclip
 import shutil
+import os
+import sys
 
-VAULT_FILE = "vault.txt"
+
+def resource_path(filename):
+
+    if getattr(sys, "frozen", False):
+
+        return os.path.join(
+            os.path.dirname(sys.executable),
+            filename
+        )
+
+    return os.path.join(
+        os.path.dirname(__file__),
+        filename
+    )
+
+
+VAULT_FILE = resource_path(
+    "vault.txt"
+)
 
 
 def add_credential():
@@ -685,3 +705,95 @@ def delete_credential(website, username):
     return (
         "Credential not found."
     )
+
+def edit_credential(
+    website,
+    username,
+    new_password
+):
+
+    try:
+
+        with open(
+            VAULT_FILE,
+            "r"
+        ) as file:
+
+            credentials = file.readlines()
+
+    except FileNotFoundError:
+
+        return (
+            "Vault file not found."
+        )
+
+    updated_credentials = []
+
+    edited = False
+
+    for credential in credentials:
+
+        try:
+
+            (
+                stored_website,
+                stored_username,
+                encrypted_password,
+                timestamp
+            ) = credential.strip().split("|")
+
+            if (
+                stored_website.lower() == website.lower()
+                and stored_username.lower() == username.lower()
+            ):
+
+                encrypted_password = (
+                    encrypt_password(
+                        new_password
+                    )
+                )
+
+                timestamp = datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                )
+
+                updated_credentials.append(
+                    f"{stored_website}|"
+                    f"{stored_username}|"
+                    f"{encrypted_password}|"
+                    f"{timestamp}\n"
+                )
+
+                edited = True
+
+            else:
+
+                updated_credentials.append(
+                    credential
+                )
+
+        except:
+
+            updated_credentials.append(
+                credential
+            )
+
+    with open(
+        VAULT_FILE,
+        "w"
+    ) as file:
+
+        file.writelines(
+            updated_credentials
+        )
+
+    if edited:
+
+        return (
+            "Credential updated successfully."
+        )
+
+    return (
+        "Credential not found."
+    )
+
